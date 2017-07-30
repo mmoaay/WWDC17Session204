@@ -1,107 +1,117 @@
-> 注意：本文中很多都是 iOS 11 才有的新特性，所以使用的时候一定要记得用 `responseToSelector` 做判断。
+> 注意：本文涉及的内容基本都是 iOS 11 才有的新特性，所以使用的时候一定要记得做版本判断，当然这只是对于使用 Objective-C 开发的应用，因为 Swift 在编译期间就会各种提醒你。
 
 # 各种 Bar 的新特性
 
-## UINavigationBar 的大标题模式
+## `UINavigationBar`
+
+### 新特性
+
+#### 大标题模式
 
 WWDC17 苹果发布了 iOS 11 系统，这一次，苹果在 UI 上又做了大调整，其中就包含了大标题。
 
-观察下面两张图，一张是 iOS 11，一张是 iOS 10。你会发现，iOS 11 在导航栏上有了一个非常明显的改变，它标题位置下移，而且字体变大。
+下面是来自官方的两张截图，这里有两个点需要注意：
+
+- 截图中 `UITableView` 中的文本也比 iOS 10 的要大，但这并不是因为 `UINavigationBar` 的大标题模式而变大的，而是苹果根据大标题模式给出的 UI 设计规范。
+- 横屏模式下并不会出现大标题，主要考虑横屏模式下垂直方向的显示区域太小。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios10_large_title.png)
+
+当然，苹果也把这个特性开放给了开发者，所以现在我们就来看一下在 iOS 11 上如何开启这个效果，其实很简单，代码中将下面的属性设置为 `true` 即可开启导航栏的大标题模式：
+
+```
+navigationBar.prefersLargeTitles
+```
+
+当然，也可以在 StoryBoard 中设置，开启方式如下图：
 
 ![](TODO)
 
-### iOS 11 中的使用姿势
-
-当然，苹果也把这个特性开放给了开发者，所以现在我们就来看一下在 iOS 11 上如何拥有这个效果，其实很简单，将下面的属性设置为 true 即可开启导航栏的大标题模式：
-
-```
-UINavigationBar.prefersLargeTitles
-```
-
-> 注意：因为 `UINavigationController` 只有一个 `UINavigationBar`，这也就意味着，如果将其 `UINavigationBar` 的 `prefersLargeTitles` 属性设置为 `true`，那么属于这个 `UINavigationController` 下的所有 `UIViewController` 都显示大标题。
+> 注意：因为每个 `UINavigationController` 只有一个 `UINavigationBar`，这也就意味着，如果将其 `UINavigationBar` 的 `prefersLargeTitles` 属性设置为 `true`，那么属于这个 `UINavigationController` 下的所有 `UIViewController` 都显示大标题。
 
 既然 `prefersLargeTitles` 是控制某个 `UINavigationController` 下的所有 `UIViewController` 是否显示大标题的属性，苹果当然也会提供单独控制的属性，也就是 `UINavigationItem` 上的 `largeTitleDisplayMode`，我们知道，每个 `UIViewController` 都有独立的 `UINavigationItem`，这样我们就可以控制单个 `UIViewController` 的大标题模式了。
 
 这个属性包含三种模式：
 
-- Automatic：默认值。表示不做任何操作，保持之前的模式。
-- Always：使用大标题。当我们进入这个页面时，显示的是大标题。
-- Never：不使用大标题模式。当我们进入这个页面时，显示的是正常的标题。
+- .automatic：默认值。表示不做任何操作，保持 `UINavigationBar` 中上一个 `UINavigationItem` 的模式。
+- .always：使用大标题。当我们进入这个页面时，显示的是大标题。
+- .never：不使用大标题模式。当我们进入这个页面时，显示的是正常的标题。
 
-### 旧版本的兼容
-
-既然 iOS 11 已经有了大标题模式，我们是否可以考虑在 iOS 11 之前也支持大标题模式呢？观察其效果，笔者分析出了几个关键变化点：
-
-- 正常的小标题被隐藏了。
-- 导航栏的高度由 64 变成了。
-- 大标题的标题字体为。
-
-也就是说我们只要在 UI 上做这几点改动即可。另外考虑到这两个属性是 iOS 11 特有的，我们可以考虑用 **Extension** 的方式扩展出这两个属性。
-
-## UITabBar 的横屏模式
-
-在 Landscape 模式和 iPad 下，UITabBar 也发生了一些改变，图标和标题是水平排列的，这样有两个好处：一方面可以让每个 Item 的图标和标题更大；另外一方面也节省了 Landscape 模式下垂直方向的空间。
-
-另外，当你长按某个 Item 的时候，会在屏幕中央出现这个 Item 图标和标题的放大版，界面上其他元素的字体也会放大，类似放大镜的效果。如下图：
+同样，这个属性也可以在 Storyboard 中设置：
 
 ![](TODO)
 
-现在我们来看如何在 iOS 11 上实现这两个功能：
+#### 在`UINavigationItem` 上添加 `UISearchController`
 
-```
-UIBarItem.landscapeImagePhone
-```
+大家先在脑海中过一下在 iOS 11 之前我们是怎么实现这个功能的。
 
-```
-UIBarItem.largeContentSizeImage
-```
-
-通过这个属性可以指定长按时显示在屏幕中央的图片，如果你提供的图片是 .xcasset 文件中的 pdf 文件，你可以直接勾选 Preserve Vector Data 这个选项，系统会自动帮你设置 `largeContentSizeImage`，如下图：
-
-![](TODO)
-
-> 这个效果其实是  内新增的特性，如果感兴趣的话可以观看
-
-## UIToolBar
-
-## 导航上的 UISearchController
-
-先看一下 iOS 11 之前我们的做法：
-
-TODO:
-
-然后来看看 iOS 11：
+是不是已经不想过了……好，我们来看看 iOS 11：
 
 ```
 // 构建一个 UISearchController 对象
+lazy var searchController = UISearchController()
 
 // 设置
 
-navigationItem.searchController = 
+navigationItem.searchController = searchController
 ```
 
-不能再简单了！
+So easy！！！
 
-另外，iOS 11 还提供了下面的属性，设置为 true 的时候就可以在滑动的时候隐藏 UISearchBar
+另外，iOS 11 的 `UINavigationItem` 还提供了 `hidesSearchBarWhenScrolling` 属性，设置为 true 的时候就可以在滑动的时候隐藏 `UISearchBar`。
 
-```
-navgationItem.hidesSearchBarWhenScrolling
-```
+#### `UIRefreshControl` 的变化
 
-## UINavigationController 上的滚动操作
+在 iOS 11 之前，`UIRefreshControl` 会被添加到相应的控件上，如 `UITableView`：
 
-### Refresh Control
+![](TODO)
 
-### Rubber banding
+而 iOS 11 之后，`UIRefreshControl` 被直接添加到了 `UINavigationBar` 上，如下图：
 
-## 终于可以在各种 Bar 上使用 AutoLayout 了
+![](TODO)
 
-重磅消息！我们终于可以在 UIToolBar 和 UINavigationBar 上使用 AutoLayout 了。（PS：此处应该有掌声）
+#### Rubber banding 效果
+
+iOS 11 之后，因为大量的内容都被添加到 `UINavigationBar` 上，如：`UIRefreshControl`、`UISearchController` 和大标题等，所以苹果在 `UINavigationBar` 上也引入了 Rubber banding 效果。
+
+### 旧版本的兼容
+
+既然 iOS 11 已经有了这些新特性，我们是否可以考虑在 iOS 11 之前也支持它们呢？通过实验，笔者分析出了几个关键变化点：
+
+- 正常的小标题被隐藏了。
+- 导航栏的高度由 64 变为 96。
+- 大标题的标题字体为 34 。
+- `UIRefreshControl` 和 `UISearchController` 都被添加到了 `UINavigationBar` 上。
+- 当 `UINavigationBar` 下方的 View 为 `UIScrollView` 等可以滚动的控件时，如果对控件做下拉操作， `UINavigationBar` 上的大标题也会随之下拉，过程中文字海会又一个稍微放大的效果，当然还会有 `UIScrollView` 的 Rubber banding 效果。
+
+也就是说我们只要在 UI 上做这几点改动即可。另外考虑到这些特性是 iOS 11 特有的，我们可以考虑用 **Extension** 的方式扩展出这些特性。
+
+## `UITabBar` 的横屏模式
+
+在 Landscape 模式和 iPad 下，`UITabBar` 也发生了一些改变，图标和标题是水平排列的，这样有两个好处：一方面可以让每个 `UIBarItem` 的图标和标题更大；另外一方面也节省了 Landscape 模式下垂直方向的空间。同时我们还可以通过 `landscapeImagePhone` 这个属性来设置 iPhone Landscape 模式下 `UIBarItem` 的图标。
+
+另外，如果设置了 `UIBarItem` 的 `largeContentSizeImage`，当你长按它的时候，会在屏幕中央出现它图标和标题的放大版，界面上其他元素的字体也会放大，类似放大镜的效果。如下图：
+
+![](TODO)
+
+当然两个属性也可以在 Storyboard 中设置，如下图：
+
+![](TODO)
+
+最后，如果你设置的图片是 .xcasset 文件中的矢量文件，你可以直接勾选 Preserve Vector Data 这个选项，系统会自动帮你设置 `largeContentSizeImage`，如下图：
+
+![](TODO)
+
+> 这个效果其实是 Accessibility 内新增的特性，如果感兴趣的话可以观看 [What’s New in Accessibility](https://developer.apple.com/wwdc17/215)
+
+## 终于可以使用 AutoLayout 了
+
+重磅消息！我们终于可以在 `UIToolBar` 和 `UINavigationBar` 上使用 AutoLayout 了。
 
 这里有几个点需要我们注意：
 
 - 开发者只需要设置自定义 View 内部的约束即可。
-- UIToolBar 和 UINavigationBar 负责控制位置。
+- `UINavigationBar` 会负责自定义 View 显示位置的控制。
 - 开发者负责控制大小。控制大小的方式有三种：
   - 指定高度和宽度约束。
   - 实现 `intrinsicContentSize`。
@@ -109,39 +119,56 @@ navgationItem.hidesSearchBarWhenScrolling
 
 ### 什么是 `intrinsicContentSize` ？
 
-## Demo
+Intrinsic Content Size：固有大小。是苹果在 AutoLayout 中引入的一个概念，意思就是说我知道自己的大小，如果你没有为我指定大小，我就按照这个大小来。比如：大家都知道在使用 AutoLayout 的时候，`UILabel` 就不用指定尺寸大小，只需指定位置即可，就是因为，只要确定了文字内容，字体等信息，它自己就能计算出大小来。
+
+> `UILabel`，`UIImageView`，`UIButton` 等组件及某些包含它们的系统组件都有 Intrinsic Content Size 属性。
 
 # Margin 和 Inset 的新特性
 
 ## 什么是 Margin
 
-首先我们需要了解一下什么是 Margin？Margin 是 Apple 在 AutoLayout 中引入的一个概念，也就是所谓的边距，官方对于 Margin 的解释其实挺拗口，所以我们在 layoutMargins 上直接举例解释一下。
+首先我们需要了解一下什么是 Margin？Margin 是苹果在 AutoLayout 中引入的一个概念，也就是所谓的边距。官方对于 Margin 的解释其实挺拗口，所以我们在 `layoutMargins` 上直接举例解释一下。
 
 ## 原有的 Margin
 
 我们先来看一下 iOS 11 之前就有的属性。
 
-### layoutMargins
+### `layoutMargins`
 
-这是 UIView 上的一个属性，类型是 UIEdgeInsets，UIEdgeInsets 这个类型大家应该就比较熟悉了，所以 layoutMargins 代表的就是 UIView 所有 subview 和 view 本身的边距了，当然前提是这些 subview 是和 layoutMarginsGuide 做约束的。
+这是 `UIView` 上的一个属性，类型是 `UIEdgeInsets`，`UIEdgeInsets` 这个类型大家应该就比较熟悉了，所以 `layoutMargins` 代表的就是 `UIView` 所有 subview 和 view 本身的边距了。如下图：
 
-### layoutMarginsGuide
+![](TODO)
 
-在 Autolayout 中作为依赖的一个标示，如果一个 view 的所有 subview 都是和 layoutMarginsGuide 做约束的话，当调节 layoutMargins 的值的时候，所有的 subview 都会受到影响。这里就有一个应用场景：如果你所有的 subview 都是基于 layoutMarginsGuide 来做约束的，当 UI 设计告诉你说他想把默认边距从 16 调整到 8。只需要一行简单的代码就可以搞定，如果没有的话，你就得一个一个约束去改了。What the fuck！！！
+当然前提是这些 subview 是和 `layoutMarginsGuide` 做约束的。
+
+### `layoutMarginsGuide`
+
+在 Autolayout 中作为依赖的一个标识，如下图：
+
+![](TODO)
+
+如果一个 view 的所有 subview 都是和 `layoutMarginsGuide` 做约束的话，当调节 `layoutMargins` 的值的时候，所有的 subview 都会受到影响。这里就有一个应用场景：如果你所有的 subview 都是基于 `layoutMarginsGuide` 来做约束的，当 UI 设计告诉你说他想把默认边距从 16 调整到 8。只需要一行简单的代码就可以搞定，如果没有的话，你就得一个一个约束去改了。What the fuck！！！
 
 ## 新增的 Margin
 
-### directionalLayoutMargins 
+### `directionalLayoutMargins`
 
-iOS 11 引入了 directionalLayoutMargins，其实目的是为了多语言支持，对于大部分语言来说，都是从左到右的顺序，但是某些语言是从右到左的…… directionalLayoutMargins 其实就是用来解决这个问题的，当语言显示顺序是从左到右时，它的 .leading 和 .trailing 表示的是正常的左右，如果语言显示顺序是从右到左时，表示的就是右左了。不过这个属性对于国内的大部分开发者来说，意义不大，除非是做一些阅读类的 App。
+iOS 11 引入了 `directionalLayoutMargins`，其实目的是为了多语言支持，对于大部分语言来说，都是从左到右的顺序，但是某些语言是从右到左的…… `directionalLayoutMargins` 其实就是用来解决这个问题的，当语言显示顺序是从左到右时，它的 .leading 和 .trailing 表示的是正常的左右，如果语言显示顺序是从右到左时，表示的就是右左了。另外要注意的是 `directionalLayoutMargins` 的类型是 `NSDirectionalEdgeInsets`。不过这个属性对于国内的大部分开发者来说，意义不大，除非是做一些阅读类的 App。
 
-### systemMinimumLayoutMargins
+下面是从左到右和从右到左两种阅读顺序时设置 `directionalLayoutMargins.trailing` 为 30 的效果：
 
-在 iOS 11 之前，UIViewController 的 view 有一个被锁定的 Margin，边距均为 16。而 iOS 11 之后，这个 Margin 被替换成了 systemMinimumLayoutMargins，也就是说这个边距也可以被修改了。另外，Apple 还新增了一个  viewRespectsSystemMinimumLayoutMargins 属性，如果将其设置为 false，你甚至可以将这个边距修改为 0，然后充满整个屏幕。
+![](TODO)
+![](TODO)
+
+### `systemMinimumLayoutMargins`
+
+在 iOS 11 之前，`UIViewController` 的 view 默认有一个被锁定的 Margin，边距均为 16，而且我们无法对这个 Margin 做任何操作。iOS 11 之后，这个 Margin 终于被放出来了，即 `systemMinimumLayoutMargins`。当然，这个属性仍然是只读的，我们并不能直接修改这个属性，但是，苹果还新增了另外一个属性：`viewRespectsSystemMinimumLayoutMargins`。如果将其设置为 false，我们的和屏幕的边距就只由 `directionalLayoutMargins` 来控制了，这样一来，我们甚至可以将边距修改为 0，从而让我们的内容充满整个屏幕。
+
+![](TODO)
 
 ### 安全区域
 
-在 iOS 11 之前，有两个属性是我们特别熟知的：topLayoutGuide 和 bottomLayoutGuide。主要在 UINavigationBar、UIToolBar 和 UITabBar 处于 translucent 的情况下使用，因为这个时候，如果你直接跟 UIViewController 的 view 做约束，你的内容是会被这些 Bar 遮住的，所以如果你不想你的内容被遮住，就需要用到 topLayoutGuide 和 bottomLayoutGuide，而 iOS 11 之后，这两个属性被 Safe area 所代替，包含了 `safeAreaInsets` 和 `safeAreaLayoutGuide`。
+在 iOS 11 之前，有两个属性是我们特别熟知的：`topLayoutGuide` 和 `bottomLayoutGuide`。主要在 `UINavigationBar`、`UIToolBar` 和 `UITabBar` 处于 translucent 的情况下使用，因为这个时候，如果你直接跟 `UIViewController` 的 view 做约束，你的内容是会被这些 Bar 遮住的，所以如果你不想你的内容被遮住，就需要用到 `topLayoutGuide` 和 `bottomLayoutGuide`，而 iOS 11 之后，这两个属性被 Safe area 所代替，包含了 `safeAreaInsets` 和 `safeAreaLayoutGuide`。
 
 additionalSafeAreaInsets
 
