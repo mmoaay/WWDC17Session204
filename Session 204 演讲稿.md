@@ -25,11 +25,11 @@ And so the position is taken care of for you. You won't get your views shoved up
 And there are three ways you can do that. You could add constraints for width and height; perfectly legal, perfectly legitimate. Do that. You can put whatever else you want in there and you're golden. You could also implement intrinsic content size. That'll also give us as much information as we need.
 You go along with the content compression hugging and compression resistance and you're set. But finally, the most easy way, for most people, is to actually make sure that all of your sub-views are properly connected and set up with auto layout.
 And what that means is let's say you have a custom title view and you have a label and a button in there, if you want to make sure that you get the proper horizontal width of that title view you just need to make sure that there are constraints set up between those labels and buttons such that the leading and trailing edge, or the width, of that title view is defined in terms of those two views. And so that's how you can use auto layout to add precise control to the size of your custom title views and bar button items.
-Now, to demonstrate all the things we've talked about today we bring up Raj Ramamurphy to give you a demo. Thanks David.
-
+Now, to demonstrate all the things we've talked about today we bring up Raj Ramamurphy to give you a demo.
+ 
 ---
 
-So as David just explained, we have a bunch of great new API in iOS 11 for these new, large navigation bars. I'm going to walk you through updating an app for iOS 11.
+Thanks David. So as David just explained, we have a bunch of great new API in iOS 11 for these new, large navigation bars. I'm going to walk you through updating an app for iOS 11.
 So here's a sample app we're going to be working with today. It's a pretty simple app called "Trail Diary." It's just a diary of some trails I visited.
 So here we are in the main view controller, which I called the "memory view controller." Now, if I tap on one of these cells you'll notice I get a detail view controller.
 This contains a photo, a description, and some information about this.
@@ -42,10 +42,10 @@ As you may have seen, we're showing search bars in the navigation in iOS 11.
 So let's add that appearance. If I go over to the memory view controller again and set the navigation item's search controller property to our instance -- in this case it's just called "search controller." Recompile and rerun the application.
 You'll notice when the application comes up into the memory view controller, we still have the large title, but now if we pull down we get this beautiful new search appearance.
 So this app is looking really great. So that's just how to update some of your bars for the new appearance in iOS 11. Now I'd like to bring Kyle Sluder up who's going to talk to you about margins, insets, and scroll views.
-Well done. Thank you Raj.
 
 ------
 
+Well done. Thank you Raj.
 So in iOS 11 we've made a number of improvements to give you more information and better control over how your views lay out their user interfaces. And let's start by talking about layout margins. Layout margins are a portion of the interior of your views that UI kit gives you as a guide to layout your content and give a little breathing room between it and the surrounding user interface elements. And we give this information to you in two ways. The first is a UI layout guide object, which you can use with auto layout to position your content. The second is a set of edge insets. And you can read these from your view and write to them to customize your layout margins. In iOS 11 we're adding a new property; directional layout margins. And this allows you to express the layout margins in your views, not just in left and right terms, but in leading and trailing.
 And these two properties are in sync with each other. The left property is in sync with the leading, when you're writing in an LTR or left to right language.
 And the right property and the trailing property are in sync. So I can do something like write a value to the trailing property of this view, which will cause its layout to adjust, and then when I'm running in a right to left language that trailing space will be put on the left side of the view and my layout code can then read it from the left property of the layout margin. You may also be familiar with a behavior that has existed since we introduced layout margins where adding a view to a view controller would fix its layout margins to UI kit defined values.
@@ -63,7 +63,11 @@ The way that you do this is using the edges for extended layout property on UI v
 
 So one really common view that's used with UI view controller is UI scroll view. And in this little sample here I have some text that's inside of the UI scroll view and contained within a navigation controller. Now traditionally navigation controllers would impart a content inset to the scroll views of their topmost view controller. We're making a really big change here in iOS 11 and we're no longer populating the content inset property through scroll views.
 Instead we've added a new property, adjusted content inset, that includes the sum of the content inset and any overlap from container view controllers.
-This means you can use the content inset property for whatever purposes are appropriate for your application, such as this additional information about this text here, and we won't change it. And you don't have to worry about saving and restoring any UI kit provided values and having content underlapping navigation bars or the status bar. You may be familiar with our auto layout support in UI scroll view that lets you dictate how big the scrollable region of your scroll view is by constraining sub-views to the scroll view itself. And we've added a couple of UI layout guide objects that make your layout more clear and more expressive and more powerful. The first is a UI layout guide object called the frame layout guide. And this layout guide corresponds to the position and size of your scroll view in screen space, which means you can do things like constrain the sub-view, like this page indicator, and it will stay fixed on screen as the user scrolls. The second layout guide object we've added is the content layout guide. And you can contain your sub-views in order to influence the scrollable size of your scroll view or have things move as the user scrolls. 
+This means you can use the content inset property for whatever purposes are appropriate for your application, such as this additional information about this text here, and we won't change it. And you don't have to worry about saving and restoring any UI kit provided values and having content underlapping navigation bars or the status bar. You may be familiar with our auto layout support in UI scroll view that lets you dictate how big the scrollable region of your scroll view is by constraining sub-views to the scroll view itself. 
+
+---
+
+And we've added a couple of UI layout guide objects that make your layout more clear and more expressive and more powerful. The first is a UI layout guide object called the frame layout guide. And this layout guide corresponds to the position and size of your scroll view in screen space, which means you can do things like constrain the sub-view, like this page indicator, and it will stay fixed on screen as the user scrolls. The second layout guide object we've added is the content layout guide. And you can contain your sub-views in order to influence the scrollable size of your scroll view or have things move as the user scrolls. 
 
 ----
 

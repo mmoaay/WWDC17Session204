@@ -1,4 +1,4 @@
-> 注意：本文涉及的内容基本都是 iOS 11 才有的新特性，所以使用的时候一定要记得做版本判断，当然这只是对于使用 Objective-C 开发的应用，因为 Swift 在编译期间就会各种提醒你。
+> 注意：本篇涉及的内容基本都是 iOS 11 才有的新特性，所以使用的时候一定要记得做版本判断，当然这只是对于使用 Objective-C 开发的应用，因为 Swift 在编译期间就会各种提醒你。
 
 # 各种 Bar 的新特性
 
@@ -41,7 +41,7 @@ navigationBar.prefersLargeTitles
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_large_title_mode_set_by_storyboard.png)
 
-#### 在`UINavigationItem` 上添加 `UISearchController`
+#### 在 `UINavigationItem` 上添加 `UISearchController`
 
 大家先在脑海中过一下在 iOS 11 之前我们是怎么实现这个功能的。
 
@@ -92,7 +92,7 @@ iOS 11 之后，因为大量的内容都被添加到 `UINavigationBar` 上，如
 
 在 Landscape 模式和 iPad 下，`UITabBar` 也发生了一些改变，图标和标题是水平排列的，而且在 iPhone 上的图标还会更小，从而节省了 Landscape 模式下垂直方向的空间。同时我们还可以通过 `landscapeImagePhone` 这个属性来设置 iPhone Landscape 模式下 `UIBarItem` 的图标。
 
-另外，如果设置了 `UIBarItem` 的 `largeContentSizeImage`，当你开启 large text 模式并长按这个 `UIBarItem` 的时候，会在屏幕中央出现它图标和标题的放大版。如下图：
+另外，如果设置了 `UIBarItem` 的 `largeContentSizeImage`，当你开启**大字体**模式并长按这个 `UIBarItem` 时，会在屏幕中央出现它图标和标题的放大版。如下图：
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_uibaritem_large_content.png)
 
@@ -106,7 +106,7 @@ iOS 11 之后，因为大量的内容都被添加到 `UINavigationBar` 上，如
 
 > 这个效果其实是 Accessibility 内新增的特性，如果感兴趣的话可以观看 [What’s New in Accessibility](https://developer.apple.com/wwdc17/215)
 
-## 终于可以使用 AutoLayout 了
+## 终于支持 AutoLayout 了
 
 重磅消息！我们终于可以在 `UIToolBar` 和 `UINavigationBar` 上使用 AutoLayout 了。
 
@@ -125,7 +125,7 @@ Intrinsic Content Size：固有大小。是苹果在 AutoLayout 中引入的一�
 
 > `UILabel`，`UIImageView`，`UIButton` 等组件及某些包含它们的系统组件都有 Intrinsic Content Size 属性。
 
-# 新的 Margin 和 Inset
+# Margin 的变化
 
 ## 什么是 Margin
 
@@ -137,7 +137,7 @@ Intrinsic Content Size：固有大小。是苹果在 AutoLayout 中引入的一�
 
 ### `layoutMargins`
 
-这是 `UIView` 上的一个属性，类型是 `UIEdgeInsets`，`UIEdgeInsets` 这个类型大家应该就比较熟悉了，所以 `layoutMargins` 代表的就是 `UIView` 所有 subview 和 view 本身的边距了。如下图：
+这是 `UIView` 上的一个属性，类型是 `UIEdgeInsets`，`UIEdgeInsets` 这个类型大家应该就比较熟悉了，所以 `layoutMargins` 代表的就是 `UIView` 所有 subview 和其本身的边距了。如下图：
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_layout_margins.png)
 
@@ -168,35 +168,93 @@ iOS 11 引入了 `directionalLayoutMargins`，其实目的是为了多语言支�
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_layout_margin_view_respects.png)
 
-### 安全区域
+# Safe area
 
-在 iOS 11 之前，有两个约束参考是我们特别熟知的：`topLayoutGuide` 和 `bottomLayoutGuide`。其实这主要在 `UINavigationBar`、`UIToolBar` 和 `UITabBar` 处于 translucent 的情况下使用。而 iOS 11 之后，这两个属性被 Safe area 所代替，包含了 `safeAreaInsets` 和 `safeAreaLayoutGuide`。
+要了解 Safe area，首先我们要看一下 iOS 11 之前有的东西。
 
-### additionalSafeAreaInsets
+## `edgesForExtendedLayout`
 
+苹果在 iOS 7 的时候引入了半透明的 `UINavigationBar`、`UIToolBar` 和 `UITabBar`，并鼓励开发者把内容延伸到这些 Bar 的下面。而实现这个效果需要用到的属性就是 `UIViewController` 的 `edgesForExtendedLayout`。这个属性的类型为 `UIRectEdge`，包含了如下几个 case：
 
+- `UIRectEdgeNone`：表示各个方向都不延伸内容。
+- `UIRectEdgeTop`：表示向顶部延伸内容。
+- `UIRectEdgeLeft`：表示向左侧延伸内容。
+- `UIRectEdgeBottom`：表示向底部延伸内容。
+- `UIRectEdgeRight`：表示向右侧延伸内容。
+- `UIRectEdgeAll`：表示各个方向都延伸内容。
 
-### Safe area 变化的回调
+默认值是 `UIRectEdgeAll`。也就是各个方向都把内容延伸到 Bar 的下面。
 
-Safe area 发生变化的时候，iOS 11 提供了两个回调来通知 `UIView` 和 `UIViewController`。
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_edges_for_extended_layout.png)
+
+## `topLayoutGuide` 和 `bottomLayoutGuide`
+
+然后系统会通过两个我们特别熟知的约束参考：`topLayoutGuide` 和 `bottomLayoutGuide` 来告诉我们顶部和底部 Bar 的大小。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_edges_for_extended_layout_top_bottom_layout_guide.png)
+
+## iOS 11 的变化
+
+而 iOS 11 之后，这两个属性被 Safe area 所**代替**。官方对 Safe area 的解释如下：
+
+- 描述不被父视图遮挡的视图区域。
+- 通过 `safeAreaInsets` 和 `safeAreaLayoutGuide` 来使用。
+- 在 tvOS 中结合 `UIScreen.overscanCompensationInsets` 来使用。
+
+### `safeAreaInsets`
+
+`UIEdgeInsets` 类型，用于设置 Safe area 和 `UIView` 的边距。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_safe_area_insets.png)
+
+### `safeAreaLayoutGuide`
+
+约束参考。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_safe_area_layout_guide.png)
+
+### `UIScreen.overscanCompensationInsets`
+
+`UIEdgeInsets` 类型，在 tvOS 中使用，可以让 `UIScreen` 中所有 `UIView` 的内容都显示在其规定的区域内，从而不会被电视的物理表圈遮住。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_safe_area_tv_os.png)
+
+### `additionalSafeAreaInsets`
+
+另外，iOS 11 还提供了另外一个属性：`additionalSafeAreaInsets`。当你在视图中添加了一个自己的 Bar，然后你想让这个 Bar 和自带的 Bar 效果一样，就可以用这个属性来增大 `safeAreaInsets`，这样一来 Safe area 中的内容就也能延伸到这个 Bar 下面了。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_safe_area_additional_insets.png)
+
+#### Safe area 变化的回调方法
+
+Safe area 发生变化的时候，iOS 11 还提供了两个回调方法来通知 `UIView` 和 `UIViewController`。
 
 - safeAreaDidChange
 - viewSafeAreaDidChange
 
-## UIScrollView 的变化
+# UIScrollView 的变化
 
-contentInset.top
+## `contentInset` 职能转移
 
-adjustedContentInset.top
+在 iOS 11 之前，如果 `UINavigationController` 最顶部的 `UIViewController` 包含 `UIScrollView`，它会给这个 `UIScrollView` 的内容传递一个顶部边距。从而防止`UIScrollView` 顶部内容被遮住。
 
-### frameLayoutGuide
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_scrollview_content_inset_top.png)
 
-### contentLayoutGuide
+而 iOS 11 之后苹果不再用 `contentInset` 来填充滚动视图的内容。而是引入了另外一个属性 `adjustedContentInset`来做 `contentInset` 原来做的事情。这也就意味着开发者可以用 `contentInset` 来做自己想做的一些事情，如下图：
 
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_scrollview_adjusted_content_inset_top.png)
 
-## UITableView 的变化
+> 这里可能会对一些第三方下拉刷新的库产生影响。
 
-### AutoLayout 的支持
+## 新增的 `frameLayoutGuide` 和 `contentLayoutGuide`
+
+iOS 11 后 `UIScrollView` 新增了两个约束参考，一个是 `frameLayoutGuide`，如果某个 `UIView` 是和这个参考做约束，那它就不会随着 `UIScrollView` 的滚动而滚动，而是固定在指定的位置。另外一个是 `contentLayoutGuide`，这个参考和 iOS 11 之前一样，如果某个 `UIView` 是和这个参考做约束，那么它就会随着 `UIScrollView` 的滚动而滚动。
+
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_scrollview_frame_content_layout_guide.png)
+
+# UITableView 的变化
+
+## AutoLayout 的支持
 
 iOS 11以后，UITableView 的 Header、Footer 和 Cell 默认都使用 self-sizing，这也就意味着，我们不需要再关心 UITableView 中任何元素的高度，使用 Autolayout 的情况下，UITableView 会自动计算所有元素的高度。
 
@@ -208,19 +266,31 @@ tableView.estimatedSectionHeaderHeight = 0;
 tableView.estimatedSectionFooterHeight = 0;
 ```
 
-### Margin 和 Inset 的变化
+## Margin 和 Inset 的变化
 
-#### seperatorInset
+### seperatorInset
 
-在 iOS 11 之前，seperatorInset 是根据 readable content guide 来改变的，这样在 iPad Landscape 模式下的时候，`UITableView` 的 Cell 就只能显示在一块固定的区域之内，并不能扩展到整个屏幕，而 iOS 11 之后，seperatorInset 则是根据 UITableView 本身 Cell 的边缘来改变了。
+在 iOS 11 之前，seperatorInset 是根据 readable content guide 来改变的，这样在 iPad Landscape 模式下的时候，`UITableView` 的 Cell 就只能显示在一块固定的区域之内，并不能扩展到整个屏幕。
 
-```
-tableview.seperatorInsetReference
-```
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_tableview_readable_content_guide.png)
 
-.fromCell 和 .fromAutomaticInsets
+同时，`seperatorInset` 也是以 readable content guide 为基准产生作用，如下图，当我们设置 `seperatorInset.left` 为 30 时，变化是以 readable content guide 为基准产生的。
 
-### Swipe 操作
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_tableview_seperator_inset.png)
+
+而 iOS 11 之后，`seperatorInset` 不再以 readable content guide 为基准产生作用，而是通过 `UITableview` 的 `seperatorInsetReference` 来决定其变化的基准。`seperatorInsetReference` 包含两种 case：
+
+- .fromCellEdges：表示以 `UITableViewCell` 的边缘为基准。
+- .fromAutomaticInsets：表示以 Safe area 的 insets 为基准。
+
+### 如何配合 Safe area 使用
+
+iOS 11 之后官方建议大家都根据 Safe area 来构建视图，为了让 `UITableview` 配合 Safe area 使用，这里有两点我们需要注意：
+
+- 设置 `UITableview` 中 `seperatorInsetReference` 属性的值为 `.fromAutomaticInsets`。
+- 所有的 Header 和 Footer 都要使用 `UITableViewHeaderFooterView` ，包括 `UITableView` 的 Header 和 Footer，以及 Section 的 Header 和 Footer。
+
+## Swipe 操作
 
 iOS 11 新增了如下几个特性：
 
@@ -231,6 +301,8 @@ iOS 11 新增了如下几个特性：
 - 提供回调方法可以让开发者取消 Swipe 操作。
 
 
-总的来说，iOS 11 新增的这些特性还是给开发者提供了极大的便利的。但是考虑到兼容旧版本的问题，能利用上的点并不是特别多，但是如果作为个人开发者，只考虑做一个单纯支持 iOS 11 的 App，这篇文章还是有一些帮助的。
+# 结束语
 
-另外，笔者把写文章时候的一些实践做了一个项目，开源在了 Github 上，配合项目看这篇文章效果会更好：[https://github.com/mmoaay/WWDC17Session204](https://github.com/mmoaay/WWDC17Session204)。
+iOS 11 新增的这些特性还是给开发者提供了极大的便利的。但是考虑到兼容旧版本的问题，能利用上的点并不是特别多，但是如果作为个人开发者，只考虑做一个单纯支持 iOS 11 的 App，这篇文章还是能提供一些帮助的。
+
+另外，笔者把写文章时候的一些实践做了一个项目，开源在了 Github 上，配合项目学习效果会更好：[https://github.com/mmoaay/WWDC17Session204](https://github.com/mmoaay/WWDC17Session204)。
