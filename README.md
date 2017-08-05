@@ -16,6 +16,7 @@ WWDC17 苹果发布了 iOS 11 系统，这一次，苹果在 UI 上又做了大�
 - 横屏模式下并不会出现大标题，主要考虑横屏模式下垂直方向的显示区域太小。
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_large_title.png)
+![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_large_title_landscape.png)
 
 当然，苹果也把这个特性开放给了开发者，所以现在我们就来看一下在 iOS 11 上如何开启这个效果，其实很简单，将 `UINavigationBar` 的 `prefersLargeTitles` 属性设置为 `true` 即可开启导航栏的大标题模式：
 
@@ -92,7 +93,7 @@ iOS 11 之后，因为大量的内容都被添加到 `UINavigationBar` 上，如
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_uibaritem_large_content.png)
 
-当然两个属性也可以在 Storyboard 中设置，如下图：
+当然这两个属性也可以在 Storyboard 中设置，如下图：
 
 ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_11_uibaritem.png)
 
@@ -277,8 +278,13 @@ tableView.estimatedSectionFooterHeight = 0;
 而 iOS 11 之后，`seperatorInset` 不再以 readable content guide 为基准产生作用，而是通过 `UITableview` 的 `seperatorInsetReference` 来决定其变化的基准。`seperatorInsetReference` 包含两种 case：
 
 - .fromCellEdges：表示以 `UITableViewCell` 的边缘为基准。
-- .fromAutomaticInsets：表示以 Safe area 的 insets 为基准。
+  
+  ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_tableview_seperator_inset_cell_edges.png)
 
+- .fromAutomaticInsets：表示以 Safe area 的 insets 为基准。
+  
+  ![](https://github.com/mmoaay/WWDC17Session204/blob/master/images/ios_10_tableview_seperator_inset_automatic.png)
+  
 ### 如何配合 Safe area 使用
 
 iOS 11 之后官方建议大家都根据 Safe area 来构建视图，为了让 `UITableview` 配合 Safe area 使用，这里有两点我们需要注意：
@@ -296,9 +302,8 @@ iOS 11 新增了如下几个特性：
 - 左侧和右侧都支持 Swipe 操作。
 - 提供回调方法可以让开发者取消 Swipe 操作。
 
-
 # 结束语
 
 iOS 11 新增的这些特性还是给开发者提供了极大的便利的。但是考虑到兼容旧版本的问题，能利用上的点并不是特别多，但是如果作为个人开发者，只考虑做一个单纯支持 iOS 11 的 App，这篇文章还是能提供一些帮助的。
 
-另外，笔者把写文章时候的一些实践做了一个项目，开源在了 Github 上，配合项目学习效果会更好：[https://github.com/mmoaay/WWDC17Session204](https://github.com/mmoaay/WWDC17Session204)。
+另外，笔者把写文章时候的一些实践做了一个 Demo，开源在了 Github 上，配合学习效果会更好：[https://github.com/mmoaay/WWDC17Session204](https://github.com/mmoaay/WWDC17Session204)。
