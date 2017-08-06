@@ -16,8 +16,10 @@ class ViewController: UIViewController {
         self.navigationItem.titleView = TitleView(frame:.zero).contentView
         
         if #available(iOS 11.0, *) {
-            self.view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 100, bottom: 10, trailing: 0)
+//            self.view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 100, bottom: 10, trailing: 0)
             self.viewRespectsSystemMinimumLayoutMargins = false
+            
+            self.additionalSafeAreaInsets = UIEdgeInsetsMake(0, 0, 0, 0)
         } else {
             // Fallback on earlier versions
         }

@@ -25,11 +25,21 @@ class TableViewController: UITableViewController {
             self.navigationItem.largeTitleDisplayMode = .never
             
             self.tableView.separatorInsetReference = .fromCellEdges
+            
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            
+            self.tableView.frameLayoutGuide
+            self.tableView.contentLayoutGuide
         } else {
             // Fallback on earlier versions
         }
         
         self.refreshControl = UIRefreshControl()
+    }
+    
+    // Safe area 发生变化产生的回调
+    override func viewSafeAreaInsetsDidChange() {
+        
     }
     
     lazy var searchController = UISearchController(searchResultsController:nil)
@@ -61,15 +71,12 @@ class TableViewController: UITableViewController {
     }
     */
 
-    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
 
-    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -79,7 +86,6 @@ class TableViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
     /*
     // Override to support rearranging the table view.

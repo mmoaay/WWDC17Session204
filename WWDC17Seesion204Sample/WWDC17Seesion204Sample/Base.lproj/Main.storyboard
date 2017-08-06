@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.19" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTI-ZX-exm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13168.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XTI-ZX-exm">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.16"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13147.4"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -262,6 +262,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Large" id="Bq4-vX-Ew1"/>
+                    <connections>
+                        <outlet property="tableView" destination="8Ep-gh-WMP" id="aYU-Zx-USO"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jpl-pi-ZKj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -454,20 +457,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D15-Zx-wPY">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g6B-fE-3H7">
                                 <rect key="frame" x="16" y="64" width="343" height="603"/>
-                                <string key="text">WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17 WWDC17</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="grt-eI-bFs">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="629"/>
+                                        <mutableString key="text">And we're here to talk to you about updating your app for iOS 11. So first a little agenda for what we're going to talk about today. The first thing that I'm going to be discussing with you is adopting new functionality in UI kits bars; UI navigation bar, UI tab bar, UI toolbar, and UI search bar. And we're going to talk to you about how these can update your app to the new looks that we've introduced throughout iOS 11.
+Next Kyle will come up and talk to you a bit about managing margins and insets, changes that we've made to UI scroll view and table view will come after that, and we're going to use all that to show you how you can make your app better. So let's start by taking a look at the files app. So if you've gotten the chance to install the beta and take a look at the files app, you'll see some changes that it's taking advantage of from UI kit.
+You can see that giant, large title view up there showing the browse feature.
+You've got a search bar right below it that has a bit of a different appearance from any search bar you've probably seen before. Now the tab bar actually has some changes, but you won't see them here so let's go ahead and rotate this to landscape.</mutableString>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="grt-eI-bFs" secondAttribute="trailing" id="0go-KK-Kbt"/>
+                                    <constraint firstAttribute="bottom" secondItem="grt-eI-bFs" secondAttribute="bottom" id="7Id-mZ-kwm"/>
+                                    <constraint firstItem="grt-eI-bFs" firstAttribute="leading" secondItem="g6B-fE-3H7" secondAttribute="leading" id="9MT-Dn-Zdr"/>
+                                    <constraint firstItem="grt-eI-bFs" firstAttribute="top" secondItem="g6B-fE-3H7" secondAttribute="top" id="OTk-zg-Kg7"/>
+                                </constraints>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9W3-FX-7YJ">
+                                <rect key="frame" x="324" y="64" width="35" height="30"/>
+                                <state key="normal" title="Page"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="D15-Zx-wPY" firstAttribute="leading" secondItem="jjv-tZ-ZFm" secondAttribute="leadingMargin" id="GZ8-tZ-d5M"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="D15-Zx-wPY" secondAttribute="trailing" id="NPI-Nw-C5g"/>
-                            <constraint firstItem="32e-I2-VPy" firstAttribute="top" secondItem="D15-Zx-wPY" secondAttribute="bottom" id="kzI-AD-vAq"/>
-                            <constraint firstItem="D15-Zx-wPY" firstAttribute="top" secondItem="5Bh-tB-vzp" secondAttribute="bottom" id="tKJ-HE-l6H"/>
+                            <constraint firstItem="g6B-fE-3H7" firstAttribute="leading" secondItem="jjv-tZ-ZFm" secondAttribute="leadingMargin" id="4JA-Ui-QnW"/>
+                            <constraint firstItem="9W3-FX-7YJ" firstAttribute="trailing" secondItem="g6B-fE-3H7" secondAttribute="trailing" id="92l-ys-bCf"/>
+                            <constraint firstItem="32e-I2-VPy" firstAttribute="top" secondItem="g6B-fE-3H7" secondAttribute="bottom" id="K0P-KI-exl"/>
+                            <constraint firstItem="g6B-fE-3H7" firstAttribute="top" secondItem="5Bh-tB-vzp" secondAttribute="bottom" id="UAJ-5F-h9U"/>
+                            <constraint firstItem="9W3-FX-7YJ" firstAttribute="top" secondItem="g6B-fE-3H7" secondAttribute="top" id="q6T-4c-cVv"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="g6B-fE-3H7" secondAttribute="trailing" id="zbX-Zj-TOF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="None" largeTitleDisplayMode="never" id="ywL-OO-Urz"/>
